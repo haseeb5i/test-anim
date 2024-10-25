@@ -4,10 +4,10 @@ import "./App.css";
 
 function App() {
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <Target />
       <div style={{ height: 20 }} />
-      <ImageCanvas width={390} height={693} numFrames={8} />
+      <ImageCanvas numFrames={8} />
     </div>
   );
 }
@@ -65,8 +65,8 @@ const Target = () => {
         width: "200px",
         height: "200px",
         borderRadius: "50%",
-        backgroundColor: "lightgrey",
         position: "relative",
+        border: "3px solid yellow",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -77,36 +77,26 @@ const Target = () => {
           width: "140px",
           height: "140px",
           borderRadius: "50%",
-          backgroundColor: "blue",
           position: "absolute",
           top: `${position.y}px`,
           left: `${position.x}px`,
           transform: "translate(-50%, -50%)",
         }}
-      ></div>
-      <div
-        style={{
-          width: "20px",
-          height: "20px",
-          borderRadius: "50%",
-          backgroundColor: "green",
-          position: "absolute",
-          top: "100px",
-          left: "100px",
-          transform: "translate(-50%, -50%)",
-        }}
-      />
+      >
+        <img
+          src="/images/board.png"
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
     </div>
   );
 };
 
 type ImageCanvasProps = {
   numFrames: number;
-  width: number;
-  height: number;
 };
 
-const ImageCanvas = ({ numFrames, width, height }: ImageCanvasProps) => {
+const ImageCanvas = ({ numFrames }: ImageCanvasProps) => {
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -124,9 +114,9 @@ const ImageCanvas = ({ numFrames, width, height }: ImageCanvasProps) => {
     if (!canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
     if (!context) return;
-    context.canvas.width = width;
-    context.canvas.height = height;
-  }, [height, width]);
+    context.canvas.width = 400;
+    context.canvas.height = 300;
+  }, []);
 
   useEffect(() => {
     setImages([]);
@@ -173,7 +163,7 @@ const ImageCanvas = ({ numFrames, width, height }: ImageCanvasProps) => {
         cancelPrevAnimation();
         clearPrevInterval();
       }
-    }, 100);
+    }, 30);
 
     const render = () => {
       const imageToRender = images[frameIndex];
@@ -186,11 +176,20 @@ const ImageCanvas = ({ numFrames, width, height }: ImageCanvasProps) => {
   };
 
   return (
-    <div style={{ height: 800, backgroundColor: "white" }}>
-      <div>
+    <div>
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "-55px",
+          translate: "-50%",
+        }}
+      >
         <canvas ref={canvasRef} />
       </div>
-      <button onClick={handleShoot}>shoot</button>
+      <button style={{ marginTop: "60px" }} onClick={handleShoot}>
+        shoot
+      </button>
     </div>
   );
 };
